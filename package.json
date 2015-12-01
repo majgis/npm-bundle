@@ -13,5 +13,21 @@
   },
   "dependencies": {
     "rimraf": "^2.4.4"
-  }
+  },
+  "directories": {
+    "test": "tests"
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/majgis/npm-bundle.git"
+  },
+  "keywords": [
+    "npm",
+    "pack"
+  ],
+  "bugs": {
+    "url": "https://github.com/majgis/npm-bundle/issues"
+  },
+  "homepage": "https://github.com/majgis/npm-bundle#readme"
 }
