@@ -1,0 +1,17 @@
+{
+  "name": "npm-bundle",
+  "version": "1.0.0",
+  "description": "npm pack with dependencies included",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Michael Jackson <majgis@gmail.com>",
+  "license": "ISC",
+  "bin": {
+    "npm-bundle": "./bin/cli.js"
+  },
+  "dependencies": {
+    "rimraf": "^2.4.4"
+  }
+}
