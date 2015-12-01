@@ -1,6 +1,6 @@
 # npm-bundle
 
-Similar to `npm pack` but include dependencies.
+Similar to `npm pack` but includes all dependencies.
 
 If you wish to include dependencies and use `npm-pack` you must do the 
 following:
@@ -8,22 +8,33 @@ following:
 1. create bundledDependencies section in package.json
 2. remember to update bundledDependencies before executing `npm-pack`
 3. remember to execute `npm install` before executing `npm-pack`
-4. remember to execute `npm install --legacy-bundling` because deduped 
-dependencies will not be included
+4. remember to execute `npm install --legacy-bundling` when using npm v3.x 
+because deduped dependencies will not be included.
 
-There must be a better way
+There must be a better way...
 
+## Prerequisites
+node v0.12 or later
+npm v2.x or npm > v3.5 (npm v3 less than 3.5 does not support disabling 
+dedup)
 
 ## Install
 
     npm install -g npm-bundle
 
+
+
 ## Use
-You can use the same inputs as [`npm install`][1]
+You can use the same arguments and options as [`npm install`][1].  The install
+is happening in the `__npmbundle` temporary directory, so only use npm install
+options relevant for that directory.
 
 
     # The current directory containing a package.json
     npm-bundle
+
+    # Verbose, useful for debugging errors
+    npm-bundle --verbose
 
     # A tarball in the current directory
     npm-bundle npm-bundle-1.0.0.tgz
@@ -34,5 +45,16 @@ You can use the same inputs as [`npm install`][1]
     # A tarball url
     npm-bundle https://github.com/indexzero/node-portfinder/archive/v0.4.0.tar.gz    
     
-    
+    # Specify a private registry
+    npm-bundle --registry=http://private.something.com/npm supersecret
 
+
+## Differences from `npm pack`
+
+1. The entire dependency tree is included in the output tarball
+2. The additional arguments of `npm install`, ie. tarball url
+3. The additional options of `npm install`, ie. --registry=http://something
+4. The package.json in the output tarball has npm install metadata
+5. --verbose option for help with debugging
+
+[1]:https://docs.npmjs.com/cli/install

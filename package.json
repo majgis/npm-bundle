@@ -29,5 +29,6 @@
   "bugs": {
     "url": "https://github.com/majgis/npm-bundle/issues"
   },
-  "homepage": "https://github.com/majgis/npm-bundle#readme"
+  "homepage": "https://github.com/majgis/npm-bundle#readme",
+  "engine": "node >= 0.12.0"
 }
