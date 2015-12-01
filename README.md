@@ -1,21 +1,23 @@
 # npm-bundle
 
-Similar to `npm pack` but includes all dependencies.
+Similar to `npm pack` but includes all dependencies. 
 
 If you wish to include dependencies and use `npm-pack` you must do the 
 following:
+
 
 1. create bundledDependencies section in package.json
 2. remember to update bundledDependencies before executing `npm-pack`
 3. remember to execute `npm install` before executing `npm-pack`
 4. remember to execute `npm install --legacy-bundling` when using npm v3.x 
-because deduped dependencies will not be included.
+because deduped dependencies will not be included.  
 
 There must be a better way...
 
 ## Prerequisites
-node v0.12 or later
-npm v2.x or npm > v3.5 (npm v3 less than 3.5 does not support disabling 
+
+* node v0.12 or later  
+* npm v2.x or npm > v3.5 (npm v3 less than 3.5 does not support disabling 
 dedup)
 
 ## Install
