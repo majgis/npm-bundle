@@ -61,7 +61,10 @@ function npmBundle (args, verbose) {
   var packageDir = cwd + 'node_modules' + path.sep + packageName + path.sep;
   var packageJsonPath = packageDir + 'package.json';
   var pkg = bundleDependenciesSync(packageJsonPath);
-  
+
+  //remove nested temp directory
+  rimraf.sync(packageDir + TEMP_DIR_NAME);
+
   //npm pack with bundled dependencies
   process.chdir(startDir);
   var buffer = child_process.execSync('npm pack ' + packageDir);
