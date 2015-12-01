@@ -4,6 +4,7 @@ var TEMP_DIR_NAME = '__npmbundle';
 var path = require('path');
 var rimraf = require('rimraf');
 var STDIO_SILENT = {stdio:['ignore', 'ignore', 'ignore']};
+var glob = require('glob');
 
 function bundleDependenciesSync(packagePath) {
   var pkg = require(packagePath);
@@ -65,16 +66,19 @@ function npmBundle (args, verbose) {
   //remove nested temp directory
   rimraf.sync(packageDir + TEMP_DIR_NAME);
 
+  var contents = glob.sync('**' + path.sep + '*', {cwd: packageDir});
+  
   //npm pack with bundled dependencies
   process.chdir(startDir);
   var buffer = child_process.execSync('npm pack ' + packageDir);
-  
+
   //remove temp directory
   rimraf.sync(TEMP_DIR_NAME);
 
-  var outputFileName = buffer.toString('utf8'); 
-  
-  return outputFileName; 
+  return {
+    file: buffer.toString('utf8'),
+    contents: contents
+  }; 
 }
 
 module.exports = npmBundle

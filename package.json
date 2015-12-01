@@ -12,6 +12,7 @@
     "npm-bundle": "./bin/cli.js"
   },
   "dependencies": {
+    "glob": "^6.0.1",
     "rimraf": "^2.4.4"
   },
   "directories": {
