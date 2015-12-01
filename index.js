@@ -17,13 +17,12 @@ function bundleDependenciesSync(packagePath) {
 function npmBundle (args, verbose) {
   var stdio = verbose ? undefined : STDIO_SILENT 
   var startDir = process.cwd();
- 
 
   //If not an absolute path, add relative to temp dir
   var relativeDir = '..' + path.sep;
   var commands
   if (args && args.length) {
-    if (args.contructor !== Array) {
+    if (args.constructor !== Array) {
       args = [args];
     }
 
