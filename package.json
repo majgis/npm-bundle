@@ -4,7 +4,7 @@
   "description": "npm pack with dependencies included",
   "main": "index.js",
   "scripts": {
-    "test": "sh tests/versions.sh"
+    "test": "echo 'Oddly, you must execute tests/versions.sh directly'"
   },
   "author": "Michael Jackson <majgis@gmail.com>",
   "license": "ISC",
