@@ -10,10 +10,6 @@ function bundleDependenciesSync(packagePath) {
   if (pkg.dependencies) {
     pkg.bundledDependencies = Object.keys(pkg.dependencies);
   }
-  delete pkg._id;
-  delete pkg._shasum;
-  delete pkg._resolved;
-  delete pkg._from;
   fs.writeFileSync(packagePath, JSON.stringify(pkg, null, 2));
 }
 
@@ -41,7 +37,7 @@ function npmBundle (arg) {
 
   //npm install tarball with production dependencies
   fs.mkdirSync('node_modules');
-  child_process.execSync('npm install --production ' + tarFileName, stdio); 
+  child_process.execSync('npm install --production --legacy-bundling ' + tarFileName, stdio); 
 
   //Add bundledDependencies section to package.json
   var cwd = process.cwd() + path.sep;
