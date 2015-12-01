@@ -59,4 +59,10 @@ options relevant for that directory.
 4. The package.json in the output tarball has npm install metadata
 5. --verbose option for help with debugging
 
+## Changelog
+
+* v1.1.1
+
+    * Show list of included files
+
 [1]:https://docs.npmjs.com/cli/install
