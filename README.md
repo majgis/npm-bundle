@@ -80,11 +80,14 @@ The install is happening in the `.npmbundle` temporary directory, so only use
 The npm executable (required to be on your path) does the heavy lifting to 
 ensure behavior is consistent with what you expect from npm.
 
-Here is a simplified view of the workflow
+Here is a simplified view of the workflow:
 
-* `npm install  --production --legacy-bundling` into the temporary workspace
-* set `bundledDependencies` in the package.json of the temporary workspace
-* `npm pack .npmbundle`
+* `cd .npmbundle`
+* `npm install  <package_name> --production --legacy-bundling`
+* set `bundledDependencies` in `
+.npmbundle/node_modules/<package_name>/package.json`
+* `cd startDir`
+* `npm pack .npmbundle/node_modules/<package_name>`
 
 
 ## Differences from `npm pack`
