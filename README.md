@@ -82,9 +82,8 @@ ensure behavior is consistent with what you expect from npm.
 
 Here is a simplified view of the workflow
 
-* Create the `.npmbundle` temporary workspace in the current directory
 * `npm install  --production --legacy-bundling` into the temporary workspace
-* set bundledDependencies in package.json of the temporary workspace
+* set `bundledDependencies` in the package.json of the temporary workspace
 * `npm pack .npmbundle`
 
 
@@ -101,7 +100,6 @@ Here is a simplified view of the workflow
 * v2.0.0
     * Everything is now executed asynchronously
     * Support for node v0.10
-
 
 * v1.1.1
     * Show list of included files and folders
