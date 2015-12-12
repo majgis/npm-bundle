@@ -41,8 +41,8 @@ function resolvePath (value, next) {
 
 function npmInstall (options, installable, next) {
   var command = 'npm i ' + installable + ' --production --legacy-bundling'
-  child_process.exec(command, options, function onNpmInstall (error) {
-    next(error)
+  child_process.exec(command, options, function onNpmInstall (error, stdout) {
+    next(error, stdout)
   })
 }
 
@@ -105,55 +105,33 @@ function npmBundle2 (args, options, cb) {
   }
 
   async.waterfall([
-    async.parallel.bind(null, [
-      async.waterfall.bind(async, [
-        rimraf.bind(null, tempDir),
-        mkdirp.bind(null, tempDir)
-      ]),
-      async.waterfall.bind(async, [
-        resolvePath.bind(null, installable),
-        storeValue.bind(null, context, 'installable')
-      ])
-    ]),
+    rimraf.bind(null, tempDir),
+    mkdirp.bind(null, tempDir),
     ignoreValue,
-
-    async.parallel.bind(async, [
-      ncp.bind(null, templateDir, tempDir),
-      cd.bind(null, tempDir)
-    ]),
-    ignoreValue,
-
+    resolvePath.bind(null, installable),
+    storeValue.bind(null, context, 'installable'),
+    ncp.bind(null, templateDir, tempDir),
+    cd.bind(null, tempDir),
     getValue.bind(null, context, 'installable'),
     npmInstall.bind(null, stdio),
+    ignoreValue,
     cd.bind(null, 'node_modules'),
     glob.bind(null, '*'),
     checkLength,
     flatten,
     cd,
-
-    async.parallel.bind(async, [
-      async.waterfall.bind(async, [
-        loadPackage,
-        bundleDependencies
-      ]),
-      async.waterfall.bind(async, [
-        glob.bind(null, '**' + path.sep + '*'),
-        storeValue.bind(null, context.output, 'contents')
-      ]),
-      async.waterfall.bind(async, [
-        pwd,
-        storeValue.bind(null, context, 'packable')
-      ])
-    ]),
-    ignoreValue,
-
+    loadPackage,
+    bundleDependencies,
+    glob.bind(null, '**' + path.sep + '*'),
+    storeValue.bind(null, context.output, 'contents'),
+    pwd,
+    storeValue.bind(null, context, 'packable'),
     cd.bind(null, startDir),
     getValue.bind(null, context, 'packable'),
     npmPack.bind(null, {}),
     storeValue.bind(null, context.output, 'file'),
     rimraf.bind(null, tempDir),
     getValue.bind(null, context, 'output')
-
   ], cb)
 }
 
