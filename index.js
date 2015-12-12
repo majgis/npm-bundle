@@ -105,13 +105,24 @@ function npmBundle2 (args, options, cb) {
   }
 
   async.waterfall([
-    rimraf.bind(null, TEMP_DIR),
-    mkdirp.bind(null, TEMP_DIR),
+    async.parallel.bind(null, [
+      async.waterfall.bind(async, [
+        rimraf.bind(null, tempDir),
+        mkdirp.bind(null, tempDir)
+      ]),
+      async.waterfall.bind(async, [
+        resolvePath.bind(null, installable),
+        storeValue.bind(null, context, 'installable')
+      ])
+    ]),
     ignoreValue,
-    resolvePath.bind(null, installable),
-    storeValue.bind(null, context, 'installable'),
-    cd.bind(null, tempDir),
-    ncp.bind(null, templateDir, tempDir),
+
+    async.parallel.bind(async, [
+      ncp.bind(null, templateDir, tempDir),
+      cd.bind(null, tempDir)
+    ]),
+    ignoreValue,
+
     getValue.bind(null, context, 'installable'),
     npmInstall.bind(null, stdio),
     cd.bind(null, 'node_modules'),
@@ -119,12 +130,23 @@ function npmBundle2 (args, options, cb) {
     checkLength,
     flatten,
     cd,
-    loadPackage,
-    bundleDependencies,
-    glob.bind(null, '**' + path.sep + '*'),
-    storeValue.bind(null, context.output, 'contents'),
-    pwd,
-    storeValue.bind(null, context, 'packable'),
+
+    async.parallel.bind(async, [
+      async.waterfall.bind(async, [
+        loadPackage,
+        bundleDependencies
+      ]),
+      async.waterfall.bind(async, [
+        glob.bind(null, '**' + path.sep + '*'),
+        storeValue.bind(null, context.output, 'contents')
+      ]),
+      async.waterfall.bind(async, [
+        pwd,
+        storeValue.bind(null, context, 'packable')
+      ])
+    ]),
+    ignoreValue,
+
     cd.bind(null, startDir),
     getValue.bind(null, context, 'packable'),
     npmPack.bind(null, {}),
