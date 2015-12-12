@@ -6,8 +6,10 @@ var rimraf = require('rimraf')
 var STDIO_SILENT = {stdio: ['ignore', 'ignore', 'ignore']}
 var ncp = require('ncp')
 var glob = require('glob')
-var async = require('async')
+var async = require('insync')
 var mkdirp = require('mkdirp')
+var NPM_VERSION_ERROR = 'Error:  Unable to install deduped dependencies.\n' +
+  'If you are using npm v3, make sure it is v3.5 or later.'
 
 function bundleDependencies (pkg, next) {
   if (pkg.dependencies) {
@@ -79,8 +81,7 @@ function storeValue (context, key, value, next) {
 
 function checkLength (packages, next) {
   if (packages.length > 1) {
-    throw new Error('Error:  Unable to install deduped dependencies.\n' +
-      'If you are using npm v3, make sure it is v3.5 or later.')
+    throw new Error(NPM_VERSION_ERROR)
   }
   next(null, packages)
 }
