@@ -1,3 +1,4 @@
+[![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg)](http://standardjs.com/)
 # npm-bundle
 
 Similar to `npm pack` but includes all dependencies. 
@@ -25,10 +26,9 @@ dedup)
     npm install -g npm-bundle
 
 
-
-## Use
+## CLI Usage
 You can use the same arguments and options as [`npm install`][1].  The install
-is happening in the `__npmbundle` temporary directory, so only use npm install
+is happening in the `.npmbundle` temporary directory, so only use npm install
 options relevant for that directory.
 
 
@@ -50,6 +50,19 @@ options relevant for that directory.
     # Specify a private registry
     npm-bundle --registry=http://private.something.com/npm supersecret
 
+## Programmatic Usage
+
+    var npmBundle = require('npm-bundle')
+    var args = []
+    var options = {
+      verbose: true
+    }
+    
+    npmBundle(args, options, function onNpmBundle (error, output) {
+      if (error) {
+        throw error
+      }
+    })
 
 ## Differences from `npm pack`
 
@@ -61,8 +74,12 @@ options relevant for that directory.
 
 ## Changelog
 
-* v1.1.1
+* v2.0.0
+    * Everything is now executed asynchronously
 
-    * Show list of included files
+
+* v1.1.1
+    * Show list of included files and folders
+
 
 [1]:https://docs.npmjs.com/cli/install

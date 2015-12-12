@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "sh tests/versions.sh",
-    "lint": "semistandard",
-    "format": "semistandard --format"
+    "lint": "standard",
+    "format": "standard --format"
   },
   "author": "Michael Jackson <majgis@gmail.com>",
   "license": "ISC",
@@ -24,7 +24,7 @@
     "test": "tests"
   },
   "devDependencies": {
-    "semistandard": "^7.0.4"
+    "standard": "^5.4.1"
   },
   "repository": {
     "type": "git",
