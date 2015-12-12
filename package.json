@@ -4,7 +4,7 @@
   "description": "npm pack with dependencies included",
   "main": "index.js",
   "scripts": {
-    "test": "echo 'Oddly, you must execute tests/versions.sh directly'",
+    "test": "sh tests/versions.sh",
     "lint": "semistandard",
     "format": "semistandard --format"
   },
