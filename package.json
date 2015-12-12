@@ -1,6 +1,6 @@
 {
   "name": "npm-bundle",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "npm pack with dependencies included",
   "main": "index.js",
   "scripts": {
