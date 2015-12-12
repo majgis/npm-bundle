@@ -1,9 +1,8 @@
 var path = require('path')
-var child_process = require('child_process')
+var exec = require('child_process').exec
 var fs = require('fs')
 var TEMP_DIR = '.npmbundle' + path.sep
 var rimraf = require('rimraf')
-var STDIO_SILENT = {stdio: ['ignore', 'ignore', 'ignore']}
 var ncp = require('ncp')
 var glob = require('glob')
 var async = require('insync')
@@ -41,18 +40,28 @@ function resolvePath (value, next) {
   })
 }
 
-function npmInstall (options, installable, next) {
-  var command = 'npm i ' + installable + ' --production --legacy-bundling'
-  child_process.exec(command, options, function onNpmInstall (error, stdout) {
-    next(error, stdout)
-  })
+function outputData (data) {
+  console.log(data)
 }
 
-function npmPack (options, packable, next) {
-  var command = 'npm pack ' + packable
-  child_process.exec(command, options, function onNpmPack (error, stdout) {
+function npmInstall (verbose, installable, next) {
+  var command = 'npm i ' + installable + ' --production --legacy-bundling'
+  var process = exec(command, function onNpmInstall (error, stdout) {
     next(error, stdout)
   })
+  if (verbose) {
+    process.stdout.on('data', outputData)
+  }
+}
+
+function npmPack (verbose, packable, next) {
+  var command = 'npm pack ' + packable
+  var process = exec(command, function onNpmPack (error, stdout) {
+    next(error, stdout)
+  })
+  if (verbose) {
+    process.stdout.on('data', outputData)
+  }
 }
 
 function loadPackage (next) {
@@ -90,17 +99,17 @@ function getValue (context, key, next) {
   next(null, context[key])
 }
 
-function npmBundle2 (args, options, cb) {
+function npmBundle (args, options, cb) {
   var argIndex = 0
-  var firstArg = args[argIndex];
-  while (firstArg && firstArg.indexOf('--') === 0){
+  var firstArg = args[argIndex]
+  while (firstArg && firstArg.indexOf('--') === 0) {
     argIndex += 1
     firstArg = args[argIndex]
   }
-  var stdio = options.verbose ? undefined : STDIO_SILENT
+  var verbose = options.verbose || false
   var startDir = process.cwd() + path.sep
   var tempDir = startDir + TEMP_DIR
-  var installable = firstArg && firstArg.indexOf('--') !== 0 ? args[0] : process.cwd()
+  var installable = firstArg || process.cwd()
   var templateDir = __dirname + path.sep + 'templates'
   var context = {
     installable: null,
@@ -119,7 +128,7 @@ function npmBundle2 (args, options, cb) {
     ncp.bind(null, templateDir, tempDir),
     cd.bind(null, tempDir),
     getValue.bind(null, context, 'installable'),
-    npmInstall.bind(null, stdio),
+    npmInstall.bind(null, verbose),
     ignoreValue,
     cd.bind(null, 'node_modules'),
     glob.bind(null, '*'),
@@ -134,11 +143,11 @@ function npmBundle2 (args, options, cb) {
     storeValue.bind(null, context, 'packable'),
     cd.bind(null, startDir),
     getValue.bind(null, context, 'packable'),
-    npmPack.bind(null, {}),
+    npmPack.bind(null, verbose),
     storeValue.bind(null, context.output, 'file'),
     rimraf.bind(null, tempDir),
     getValue.bind(null, context, 'output')
   ], cb)
 }
 
-module.exports = npmBundle2
+module.exports = npmBundle
