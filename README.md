@@ -1,3 +1,4 @@
+[![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg)](http://standardjs.com/)
 # npm-bundle
 
 Similar to `npm pack` but includes all dependencies. 
@@ -16,8 +17,8 @@ There must be a better way...
 
 ## Prerequisites
 
-* node v0.12 or later  
-* npm v2.x or npm > v3.5 (npm v3 less than 3.5 does not support disabling 
+* node v0.10 or later  
+* npm v1.x, v2.x or npm > v3.5 (npm v3 less than 3.5 does not support disabling 
 dedup)
 
 ## Install
@@ -25,12 +26,9 @@ dedup)
     npm install -g npm-bundle
 
 
-
-## Use
-You can use the same arguments and options as [`npm install`][1].  The install
-is happening in the `__npmbundle` temporary directory, so only use npm install
-options relevant for that directory.
-
+## CLI Usage
+You can use the same arguments and options as [`npm install`][1].  There is an
+additional --verbose option to help with debugging issues.
 
     # The current directory containing a package.json
     npm-bundle
@@ -39,7 +37,7 @@ options relevant for that directory.
     npm-bundle --verbose
 
     # A tarball in the current directory
-    npm-bundle npm-bundle-1.0.0.tgz
+    npm-bundle something-1.0.0.tgz
     
     # A package from the registry
     npm-bundle request
@@ -48,21 +46,63 @@ options relevant for that directory.
     npm-bundle https://github.com/indexzero/node-portfinder/archive/v0.4.0.tar.gz    
     
     # Specify a private registry
-    npm-bundle --registry=http://private.something.com/npm supersecret
+    npm-bundle secretPackage --registry=http://private.something.com/npm
+
+## Programmatic Usage
+
+    var npmBundle = require('npm-bundle')
+    var args = []
+    var options = {
+      verbose: true
+    }
+    
+    npmBundle(args, options, function onNpmBundle (error, output) {
+      if (error) {
+        throw error
+      }
+      console.log(output.contents.join('\n'))
+      process.stdout.write(output.file)
+    })
+
+The given callback receives an error parameter and an output object parameter.
+
+The output object will have the following properties:
+
+* **contents** - output from glob executed on temporary install directory
+* **file** - output from npm pack executed on temporary install directory
+
+
+## Behind the Scenes
+
+The install is happening in the `.npmbundle` temporary directory, so only use
+ npm install options relevant for that directory.
+
+The npm executable (required to be on your path) does the heavy lifting to 
+ensure behavior is consistent with what you expect from npm.
+
+Here is a simplified view of the workflow
+
+* `npm install  --production --legacy-bundling` into the temporary workspace
+* set `bundledDependencies` in the package.json of the temporary workspace
+* `npm pack .npmbundle`
 
 
 ## Differences from `npm pack`
 
-1. The entire dependency tree is included in the output tarball
-2. The additional arguments of `npm install`, ie. tarball url
+1. The entire deduped dependency tree is included in the output tarball
+2. The additional arguments of `npm install`, ie. a tarball url
 3. The additional options of `npm install`, ie. --registry=http://something
 4. The package.json in the output tarball has npm install metadata
 5. --verbose option for help with debugging
 
 ## Changelog
 
-* v1.1.1
+* v2.0.0
+    * Everything is now executed asynchronously
+    * Support for node v0.10
 
-    * Show list of included files
+* v1.1.1
+    * Show list of included files and folders
+
 
 [1]:https://docs.npmjs.com/cli/install
