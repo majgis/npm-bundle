@@ -12,6 +12,8 @@ following:
 3. remember to execute `npm install` before executing `npm-pack`
 4. remember to execute `npm install --legacy-bundling` when using npm v3.x 
 because deduped dependencies will not be included.  
+5. remember that `npm install --legacy-bundling` is not available in npm  v3
+.x < v3.5
 
 There must be a better way...
 
@@ -92,7 +94,8 @@ Here is a simplified view of the workflow:
 
 ## Differences from `npm pack`
 
-1. The entire deduped dependency tree is included in the output tarball
+1. The entire dependency tree (legacy, not deduped) is included in the output 
+tarball
 2. The additional arguments of `npm install`, ie. a tarball url
 3. The additional options of `npm install`, ie. --registry=http://something
 4. The package.json in the output tarball has npm install metadata
