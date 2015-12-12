@@ -114,8 +114,8 @@ function npmInstall (options, installable, next) {
 
 function npmPack (options, packable, next) {
   var command = 'npm pack ' + packable
-  child_process.exec(command, options, function onNpmPack(error){
-    next(error)
+  child_process.exec(command, options, function onNpmPack(error, stdout){
+    next(error, stdout)
   })
 }
 
@@ -188,14 +188,15 @@ function npmBundle2 (args, options, cb) {
     loadPackage,
     bundleDependencies,
     glob.bind(null, '**' + path.sep + '*'),
-    storeValue.bind(null, context, 'contents'),
+    storeValue.bind(null, context.output, 'contents'),
     pwd,
     storeValue.bind(null, context, 'packable'),
     cd.bind(null, startDir),
     getValue.bind(null, context, 'packable'),
     npmPack.bind(null, {}),
-    rimraf.bind(null, tempDir)
-
+    storeValue.bind(null, context.output, 'file'),
+    rimraf.bind(null, tempDir),
+    getValue.bind(null, context, 'output')
 
   ], cb)
 

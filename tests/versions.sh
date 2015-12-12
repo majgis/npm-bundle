@@ -19,6 +19,8 @@ echo
 
 nvm install 5
 npm install -g npm@3.5
+npm link
+echo
 npm-bundle ../
 echo
 
