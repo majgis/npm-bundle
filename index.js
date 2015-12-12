@@ -91,10 +91,15 @@ function getValue (context, key, next) {
 }
 
 function npmBundle2 (args, options, cb) {
+  var argIndex = 0
+  var firstArg = args[argIndex];
+  while (firstArg && firstArg.indexOf('--') === 0){
+    argIndex += 1
+    firstArg = args[argIndex]
+  }
   var stdio = options.verbose ? undefined : STDIO_SILENT
   var startDir = process.cwd() + path.sep
   var tempDir = startDir + TEMP_DIR
-  var firstArg = args[0]
   var installable = firstArg && firstArg.indexOf('--') !== 0 ? args[0] : process.cwd()
   var templateDir = __dirname + path.sep + 'templates'
   var context = {
