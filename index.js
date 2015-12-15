@@ -44,8 +44,10 @@ function outputData (data) {
   console.log(data)
 }
 
-function npmInstall (verbose, installable, next) {
-  var command = 'npm i ' + installable + ' --production --legacy-bundling'
+function npmInstall (verbose, options, installable, next) {
+  options = options.length ? ' '  + options.join(' ') : ''
+  var command = 'npm i ' + installable + options + ' --production' +
+  ' --legacy-bundling'
   var process = exec(command, function onNpmInstall (error, stdout) {
     next(error, stdout)
   })
@@ -99,17 +101,34 @@ function getValue (context, key, next) {
   next(null, context[key])
 }
 
-function npmBundle (args, options, cb) {
+function splitArgAndOptions (argAndOptions) {
+  argAndOptions = argAndOptions.slice()
   var argIndex = 0
-  var firstArg = args[argIndex]
-  while (firstArg && firstArg.indexOf('--') === 0) {
+  var firstArg = argAndOptions[argIndex]
+  while (firstArg && firstArg.indexOf('-') === 0) {
     argIndex += 1
-    firstArg = args[argIndex]
+    firstArg = argAndOptions[argIndex]
   }
+
+  if (firstArg) {
+    argAndOptions.splice(argIndex, argIndex + 1)
+  } else {
+    firstArg = process.cwd()
+  }
+
+  var result = {
+    arg: firstArg,
+    options: argAndOptions
+  };
+
+  return result
+}
+
+function npmBundle (args, options, cb) {
+  var argAndOptions = splitArgAndOptions(args)
   var verbose = options.verbose || false
   var startDir = process.cwd() + path.sep
   var tempDir = startDir + TEMP_DIR
-  var installable = firstArg || process.cwd()
   var templateDir = __dirname + path.sep + 'templates'
   var context = {
     installable: null,
@@ -123,12 +142,12 @@ function npmBundle (args, options, cb) {
     rimraf.bind(null, tempDir),
     mkdirp.bind(null, tempDir),
     ignoreValue,
-    resolvePath.bind(null, installable),
+    resolvePath.bind(null, argAndOptions.arg),
     storeValue.bind(null, context, 'installable'),
     ncp.bind(null, templateDir, tempDir),
     cd.bind(null, tempDir),
     getValue.bind(null, context, 'installable'),
-    npmInstall.bind(null, verbose),
+    npmInstall.bind(null, verbose, argAndOptions.options),
     ignoreValue,
     cd.bind(null, 'node_modules'),
     glob.bind(null, '*'),
