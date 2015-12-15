@@ -103,6 +103,9 @@ tarball
 
 ## Changelog
 
+* v2.0.3
+    * The issue with options not being passed was fixed.
+
 * v2.0.0
     * Everything is now executed asynchronously
     * Support for node v0.10
