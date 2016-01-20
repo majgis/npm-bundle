@@ -1,39 +1,31 @@
 #!/usr/bin/env bash
 
 npm uninstall -g npm-bundle
+npm link
 
 source ~/.profile_nvm
 cd `dirname $0`
 
 nvm install 0.10
-npm install -g ../
 echo
-npm-bundle ../
-echo
-npm uninstall -g npm-bundle
+node ../bin/cli.js ../
 echo
 
 nvm install 0.12
-npm install -g ../
 echo
-npm-bundle ../
-echo
-npm uninstall -g npm-bundle
+node ../bin/cli.js ../
 echo
 
 nvm install 4
-npm install -g ../
 echo
-npm-bundle ../
-echo
-npm uninstall -g npm-bundle
+node ../bin/cli.js ../
 echo
 
 nvm install 5
-npm install -g ../
+npm i -g npm
 echo
-npm-bundle ../
-echo
-npm uninstall -g npm-bundle
+node ../bin/cli.js ../
 echo
 
+npm uninstall -g npm-bundle
+echo
