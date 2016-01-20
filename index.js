@@ -154,6 +154,7 @@ function npmBundle (args, options, cb) {
     checkLength,
     flatten,
     cd,
+    rimraf.bind(null, '.npmbundle'),
     loadPackage,
     bundleDependencies,
     glob.bind(null, '**' + path.sep + '*'),

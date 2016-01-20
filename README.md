@@ -103,6 +103,9 @@ tarball
 
 ## Changelog
 
+* v2.0.4
+    * .npmbundle folder is no longer included in the output file
+    
 * v2.0.3
     * The issue with options not being passed was fixed.
 
