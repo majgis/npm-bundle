@@ -1,7 +1,8 @@
 [![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg)](http://standardjs.com/)
 # npm-bundle
 
-Similar to `npm pack` but includes all dependencies. 
+Similar to `npm pack` but includes packages in the dependencies section of 
+the package.json. 
 
 If you wish to include dependencies and use `npm-pack` you must do the 
 following:
@@ -62,7 +63,6 @@ additional --verbose option to help with debugging issues.
       if (error) {
         throw error
       }
-      console.log(output.contents.join('\n'))
       process.stdout.write(output.file)
     })
 
@@ -70,7 +70,6 @@ The given callback receives an error parameter and an output object parameter.
 
 The output object will have the following properties:
 
-* **contents** - output from glob executed on temporary install directory
 * **file** - output from npm pack executed on temporary install directory
 
 
@@ -102,6 +101,9 @@ tarball
 5. --verbose option for help with debugging
 
 ## Changelog
+
+* v3.0.0
+    * The contents is no longer output, use `tar -tvf something.tgz` instead
 
 * v2.0.4
     * .npmbundle folder is no longer included in the output file

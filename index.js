@@ -157,8 +157,6 @@ function npmBundle (args, options, cb) {
     rimraf.bind(null, '.npmbundle'),
     loadPackage,
     bundleDependencies,
-    glob.bind(null, '**' + path.sep + '*'),
-    storeValue.bind(null, context.output, 'contents'),
     pwd,
     storeValue.bind(null, context, 'packable'),
     cd.bind(null, startDir),

@@ -11,8 +11,6 @@ npmBundle(args, options, function onNpmBundle (error, output) {
     throw error
   }
   if (output) {
-    console.log(output.contents.join('\n'))
-    console.log(Array(output.file.length).join('='))
     process.stdout.write(output.file)
   }
 })
