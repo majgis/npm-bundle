@@ -29,3 +29,5 @@ echo
 
 npm uninstall -g npm-bundle
 echo
+
+rm -rf *.tgz
