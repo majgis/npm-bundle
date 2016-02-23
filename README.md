@@ -99,8 +99,15 @@ tarball
 3. The additional options of `npm install`, ie. --registry=http://something
 4. The package.json in the output tarball has npm install metadata
 5. --verbose option for help with debugging
+6. All three publish scripts are prefixed with an underscore in the package
+.json in the output tarball.
+
 
 ## Changelog
+
+* v3.0.1
+    * run-scripts issue fixed by disabling publish scripts prior to `npm pack`
+    * engine corrected to be Node.js v0.10
 
 * v3.0.0
     * The contents is no longer output, use `tar -tvf something.tgz` instead

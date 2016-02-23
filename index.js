@@ -9,15 +9,31 @@ var async = require('insync')
 var mkdirp = require('mkdirp')
 var NPM_VERSION_ERROR = 'Error:  Unable to install deduped dependencies.\n' +
   'If you are using npm v3, make sure it is v3.5 or later.'
+var scriptNames = [
+  'publish',
+  'prepublish',
+  'postpublish'
+]
 
 function bundleDependencies (pkg, next) {
   if (pkg.dependencies) {
     pkg.bundledDependencies = Object.keys(pkg.dependencies)
   }
-  var output = JSON.stringify(pkg, null, 2)
-  fs.writeFile('package.json', output, function onBundleDependencies (error) {
-    next(error)
-  })
+  next(null, pkg)
+}
+
+function disableScripts (pkg, next) {
+  var scripts = pkg.scripts
+  if (scripts) {
+    for (var i = 0; i < scriptNames.length; i++) {
+      var scriptName = scriptNames[i]
+      if (scripts[scriptName]) {
+        scripts['_' + scriptName] = scripts[scriptName]
+        delete scripts[scriptName]
+      }
+    }
+  }
+  next(null, pkg)
 }
 
 function cd (dir, next) {
@@ -45,9 +61,8 @@ function outputData (data) {
 }
 
 function npmInstall (verbose, options, installable, next) {
-  options = options.length ? ' '  + options.join(' ') : ''
-  var command = 'npm i ' + installable + options + ' --production' +
-  ' --legacy-bundling'
+  options = options.length ? ' ' + options.join(' ') : ''
+  var command = 'npm i ' + installable + options + ' --legacy-bundling'
   var process = exec(command, function onNpmInstall (error, stdout) {
     next(error, stdout)
   })
@@ -64,13 +79,6 @@ function npmPack (verbose, packable, next) {
   if (verbose) {
     process.stdout.on('data', outputData)
   }
-}
-
-function loadPackage (next) {
-  fs.readFile('package.json', 'utf8', function onGetPackageDetails (error, data) {
-    data = JSON.parse(data)
-    next(error, data)
-  })
 }
 
 function flatten (value, next) {
@@ -119,9 +127,17 @@ function splitArgAndOptions (argAndOptions) {
   var result = {
     arg: firstArg,
     options: argAndOptions
-  };
+  }
 
   return result
+}
+
+function jsonParse (data, next) {
+  next(null, JSON.parse(data))
+}
+
+function jsonStringify (obj, next) {
+  next(null, JSON.stringify(obj, null, 2))
 }
 
 function npmBundle (args, options, cb) {
@@ -155,8 +171,12 @@ function npmBundle (args, options, cb) {
     flatten,
     cd,
     rimraf.bind(null, '.npmbundle'),
-    loadPackage,
+    fs.readFile.bind(null, 'package.json', 'utf8'),
+    jsonParse,
     bundleDependencies,
+    disableScripts,
+    jsonStringify,
+    fs.writeFile.bind(null, 'package.json'),
     pwd,
     storeValue.bind(null, context, 'packable'),
     cd.bind(null, startDir),

@@ -1,12 +1,12 @@
 {
   "name": "npm-bundle",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "npm pack with dependencies included",
   "main": "index.js",
   "scripts": {
     "test": "sh tests/versions.sh",
     "lint": "standard",
-    "format": "standard --format"
+    "standard": "standard --format"
   },
   "author": "Michael Jackson <majgis@gmail.com>",
   "license": "ISC",
@@ -38,5 +38,5 @@
     "url": "https://github.com/majgis/npm-bundle/issues"
   },
   "homepage": "https://github.com/majgis/npm-bundle#readme",
-  "engine": "node >= 0.12.0"
+  "engine": "node >= 0.10.0"
 }
