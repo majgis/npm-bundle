@@ -9,8 +9,8 @@ following:
 
 
 1. create bundledDependencies section in package.json
-2. remember to update bundledDependencies before executing `npm-pack`
-3. remember to execute `npm install` before executing `npm-pack`
+2. remember to update bundledDependencies before executing `npm pack`
+3. remember to execute `npm install` before executing `npm pack`
 4. remember to execute `npm install --legacy-bundling` when using npm v3.x 
 because deduped dependencies will not be included.  
 5. remember that `npm install --legacy-bundling` is not available in npm  v3
@@ -100,7 +100,7 @@ tarball
 4. The package.json in the output tarball has npm install metadata
 5. --verbose option for help with debugging
 6. All three publish scripts are prefixed with an underscore in the package
-.json in the output tarball.
+.json in the output tarball (a workaround to ensure they are only run once)
 
 
 ## Changelog
