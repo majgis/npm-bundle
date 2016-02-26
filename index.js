@@ -140,6 +140,20 @@ function jsonStringify (obj, next) {
   next(null, JSON.stringify(obj, null, 2))
 }
 
+//Copy .npmrc only if installable is directory with .npmrc
+function copyNpmrc (tempDir, installable, next) {
+  var npmrcPath = installable + '/.npmrc'
+  fs.exists(npmrcPath, function onNpmrcExists (exists) {
+    if (exists) {
+      ncp(npmrcPath, tempDir + '/.npmrc', function onCopyNpmrc (err) {
+        next(err)
+      })
+    } else {
+      next()
+    }
+  })
+}
+
 function npmBundle (args, options, cb) {
   var argAndOptions = splitArgAndOptions(args)
   var verbose = options.verbose || false
@@ -161,6 +175,8 @@ function npmBundle (args, options, cb) {
     resolvePath.bind(null, argAndOptions.arg),
     storeValue.bind(null, context, 'installable'),
     ncp.bind(null, templateDir, tempDir),
+    getValue.bind(null, context, 'installable'),
+    copyNpmrc.bind(null, tempDir),
     cd.bind(null, tempDir),
     getValue.bind(null, context, 'installable'),
     npmInstall.bind(null, verbose, argAndOptions.options),
