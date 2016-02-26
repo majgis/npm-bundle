@@ -105,6 +105,10 @@ tarball
 
 ## Changelog
 
+* v3.0.3
+    * Fixed [#10](https://github.com/majgis/npm-bundle/issues/10): The .npmrc
+    is ignored when bundling directories
+
 * v3.0.1
     * run-scripts issue fixed by disabling publish scripts prior to `npm pack`
     * engine corrected to be Node.js v0.10
