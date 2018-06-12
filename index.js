@@ -4,6 +4,7 @@ var fs = require('fs')
 var TEMP_DIR = '.npmbundle' + path.sep
 var rimraf = require('rimraf')
 var ncp = require('ncp')
+var os = require('os')
 var glob = require('glob')
 var async = require('insync')
 var mkdirp = require('mkdirp')
@@ -158,7 +159,7 @@ function npmBundle (args, options, cb) {
   var argAndOptions = splitArgAndOptions(args)
   var verbose = options.verbose || false
   var startDir = process.cwd() + path.sep
-  var tempDir = startDir + TEMP_DIR
+  var tempDir = os.tmpdir() + path.sep + TEMP_DIR
   var templateDir = __dirname + path.sep + 'templates'
   var context = {
     installable: null,
