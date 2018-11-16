@@ -1,5 +1,6 @@
 var path = require('path')
 var exec = require('child_process').exec
+var spawn = require('child_process').spawn
 var fs = require('fs')
 var TEMP_DIR = '.npmbundle' + path.sep
 var rimraf = require('rimraf')
@@ -72,12 +73,12 @@ function npmInstall (verbose, options, installable, next) {
 }
 
 function npmPack (verbose, packable, next) {
-  var command = 'npm pack ' + packable
-  var process = exec(command, function onNpmPack (error, stdout) {
-    next(error, stdout)
-  })
+  var command = 'npm';
+  var args = ['pack', packable]
+  var pack = spawn(command, args)
   if (verbose) {
-    process.stdout.on('data', outputData)
+    pack.stdout.on('data', outputData)
+    pack.on('exit', () => console.log(command, args, 'finished'))
   }
 }
 
