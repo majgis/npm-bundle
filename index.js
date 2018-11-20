@@ -63,6 +63,7 @@ function outputData (data) {
 
 function npmInstall (verbose, options, installable, next) {
   options = options.length ? ' ' + options.join(' ') : ''
+  installable = '"' + installable + '"'
   var command = 'npm i ' + installable + options + ' --legacy-bundling'
   var process = exec(command, function onNpmInstall (error, stdout) {
     next(error, stdout)
